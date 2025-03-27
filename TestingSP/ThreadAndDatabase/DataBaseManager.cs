@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿namespace ThreadAndDatabase;
 
-namespace ThreadAndDatabase
+public delegate void DeletageContextConnection(ThreadAppContext threadAppContext);
+
+public class DataBaseManager
 {
-    public class DataBaseManager
-    {
-        private readonly ThreadAppContext _threadAppContext;
+    private ThreadAppContext _threadAppContext;
 
-        public DataBaseManager()
-        {
-            _threadAppContext = new ThreadAppContext();
-            
-        }
+    public event DeletageContextConnection GetConnectionEvent;
+
+    public DataBaseManager()
+    {
+        Thread runConection = new Thread(RunAsyncConnection);
+        runConection.Start();
+    }
+
+    private void RunAsyncConnection()
+    {
+        _threadAppContext = new ThreadAppContext();
+        _threadAppContext.Banans.Any();
+        if (GetConnectionEvent != null)
+            GetConnectionEvent(_threadAppContext);
     }
 }
