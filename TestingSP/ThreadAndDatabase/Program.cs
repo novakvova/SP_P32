@@ -1,27 +1,26 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace ThreadAndDatabase
 {
     internal class Program
     {
+        private static DataBaseManager _dataBaseManager; 
         static void Main(string[] args)
         {
             Console.InputEncoding = Encoding.UTF8;
             Console.OutputEncoding = Encoding.UTF8;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start(); //Обчислюємо час роботи програми
+            _dataBaseManager = new DataBaseManager();
+            _dataBaseManager.GetConnectionEvent += DataBaseManager_GetConnectionEvent;
+            _dataBaseManager.DataInserted += _dataBaseManager_DataInserted;
 
-            DataBaseManager dataBaseManager = new DataBaseManager();
-            dataBaseManager.GetConnectionEvent += DataBaseManager_GetConnectionEvent;
+            Console.WriteLine("Піготовка програми до запуску ...");
+           
 
 
-            while (true) 
-            {
-                Console.WriteLine("Назміть p - пауза"
-            }
-
-            
             //ThreadAppContext threadAppContext = new ThreadAppContext();
             //threadAppContext.Banans.Any();
 
@@ -31,9 +30,39 @@ namespace ThreadAndDatabase
             Console.WriteLine($"Run time {ts}");
         }
 
+        private static void _dataBaseManager_DataInserted(int obj)
+        {
+            Console.WriteLine($"Insert data --{obj}--");
+        }
+
         private static void DataBaseManager_GetConnectionEvent(ThreadAppContext threadAppContext)
         {
-            Console.WriteLine("Зєднання з БД успішно кількість бананів {0}", threadAppContext.Banans.Count());
+            //Console.WriteLine("Зєднання з БД успішно кількість бананів {0}", threadAppContext.Banans.Count());
+            Console.WriteLine("Вкажіть кількість користувачів");
+            int count = int.Parse(Console.ReadLine());
+            //_dataBaseManager.AddBanans(count);
+            _dataBaseManager.AddBanansAsync(count);
+
+            while (true)
+            {
+                Console.WriteLine("Назміть p - пауза, r - відновити, q - вихід");
+                var key = Console.ReadKey(true).Key;
+                if (key == ConsoleKey.P)
+                {
+                    Console.WriteLine("Пауза ...");
+                }
+
+                else if (key == ConsoleKey.R)
+                {
+                    Console.WriteLine("Віновлено ...");
+                }
+
+                else if (key == ConsoleKey.Q)
+                {
+                    Console.WriteLine("Вихід");
+                    break;
+                }
+            }
         }
     }
 }
