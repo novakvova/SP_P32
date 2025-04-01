@@ -14,6 +14,13 @@ namespace ThreadAndDatabase
 
             DataBaseManager dataBaseManager = new DataBaseManager();
             dataBaseManager.GetConnectionEvent += DataBaseManager_GetConnectionEvent;
+
+
+            while (true) 
+            {
+                Console.WriteLine("Назміть p - пауза"
+            }
+
             
             //ThreadAppContext threadAppContext = new ThreadAppContext();
             //threadAppContext.Banans.Any();

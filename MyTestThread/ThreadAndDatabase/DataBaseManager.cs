@@ -21,12 +21,4 @@ public class DataBaseManager
         if (GetConnectionEvent != null)
             GetConnectionEvent(_threadAppContext);
     }
-
-    public void AddBanans(int count)
-    {
-        for (int i = 0; i < count; i++)
-        {
-
-        }
-    }
 }
