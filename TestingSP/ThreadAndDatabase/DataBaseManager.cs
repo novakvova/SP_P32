@@ -12,6 +12,9 @@ public class DataBaseManager
     public event Action<int> DataInserted;
     public event Action<ThreadAppContext> GetConnectionEvent;
 
+    //Спеціальний обєкт, який вміє призупитняти довільний потік
+    public static ManualResetEvent mre = new ManualResetEvent(false);
+
     //public event DeletageContextConnection GetConnectionEvent;
 
     public DataBaseManager()
@@ -48,8 +51,10 @@ public class DataBaseManager
             var b = faker.Generate(1);
             _threadAppContext.Add(b[0]);
             _threadAppContext.SaveChanges();
-
             DataInserted?.Invoke(i + 1);
+
+            mre.WaitOne(Timeout.Infinite); //Якщо потік зупиненто,
+                           //то у цьому місці буде очіувати продоваження
         }
     }
 }

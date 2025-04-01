@@ -19,8 +19,6 @@ namespace ThreadAndDatabase
 
             Console.WriteLine("Піготовка програми до запуску ...");
            
-
-
             //ThreadAppContext threadAppContext = new ThreadAppContext();
             //threadAppContext.Banans.Any();
 
@@ -37,6 +35,7 @@ namespace ThreadAndDatabase
 
         private static void DataBaseManager_GetConnectionEvent(ThreadAppContext threadAppContext)
         {
+            DataBaseManager.mre.Set(); //Потік буде працювати у стандартному режимі 
             //Console.WriteLine("Зєднання з БД успішно кількість бананів {0}", threadAppContext.Banans.Count());
             Console.WriteLine("Вкажіть кількість користувачів");
             int count = int.Parse(Console.ReadLine());
@@ -49,11 +48,13 @@ namespace ThreadAndDatabase
                 var key = Console.ReadKey(true).Key;
                 if (key == ConsoleKey.P)
                 {
+                    DataBaseManager.mre.Reset(); //Призупинити виконання
                     Console.WriteLine("Пауза ...");
                 }
 
                 else if (key == ConsoleKey.R)
                 {
+                    DataBaseManager.mre.Set();
                     Console.WriteLine("Віновлено ...");
                 }
 
