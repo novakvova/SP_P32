@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace ThreadAndDatabase
 {
@@ -8,7 +9,8 @@ namespace ThreadAndDatabase
     {
         private static DataBaseManager _dataBaseManager;
         //Токен для переривання процесу роботи потоку.
-        private static CancellationToken cancellationToken;
+        private static CancellationTokenSource cancellationToken;
+        
 
         static void Main(string[] args)
         {
@@ -38,12 +40,15 @@ namespace ThreadAndDatabase
 
         private static void DataBaseManager_GetConnectionEvent(ThreadAppContext threadAppContext)
         {
+            cancellationToken = new CancellationTokenSource();
+            CancellationToken token = cancellationToken.Token;
+
             DataBaseManager.mre.Set(); //Потік буде працювати у стандартному режимі 
             //Console.WriteLine("Зєднання з БД успішно кількість бананів {0}", threadAppContext.Banans.Count());
             Console.WriteLine("Вкажіть кількість користувачів");
             int count = int.Parse(Console.ReadLine());
             //_dataBaseManager.AddBanans(count);
-            _dataBaseManager.AddBanansAsync(count);
+            _dataBaseManager.AddBanansAsync(count, token);
             var isTrue=true;
             while (isTrue)
             {
@@ -64,7 +69,10 @@ namespace ThreadAndDatabase
                 else if (key == ConsoleKey.Q)
                 {
                     Console.WriteLine("Вихід");
-                    isTrue=false;
+                    cancellationToken.Cancel();
+                    DataBaseManager.mre.Set();
+                    
+                    isTrue =false;
                 }
             }
         }

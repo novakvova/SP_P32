@@ -1,4 +1,6 @@
-﻿using Bogus;
+﻿using System.Diagnostics.Metrics;
+using System.Reflection;
+using Bogus;
 using Bogus.DataSets;
 
 namespace ThreadAndDatabase;
@@ -31,13 +33,13 @@ public class DataBaseManager
             GetConnectionEvent(_threadAppContext);
     }
 
-    public void AddBanansAsync(int count)
+    public void AddBanansAsync(int count, CancellationToken? token = null)
     {
-        Thread thread = new Thread(()=>AddBanans(count));
+        Thread thread = new Thread(()=>AddBanans(count, token));
         thread.Start();
     }
 
-    public void AddBanans(int count)
+    public void AddBanans(int count, CancellationToken? token = null)
     {
         var faker = new Faker<Banan>("uk")
             .RuleFor(b => b.FirstName, f => f.Name.FirstName())
@@ -54,7 +56,17 @@ public class DataBaseManager
             DataInserted?.Invoke(i + 1);
 
             mre.WaitOne(Timeout.Infinite); //Якщо потік зупиненто,
-                           //то у цьому місці буде очіувати продоваження
+                                           //то у цьому місці буде очіувати продоваження
+
+            if (token != null)
+            {
+                // Перевіряємо, чи був отриманий сигнал на скасування завдання  
+                if (token.Value.IsCancellationRequested)
+                {
+                    return; // Виходимо з методу, завершуючи виконання завдання  
+                }
+            }
+
         }
     }
 }
