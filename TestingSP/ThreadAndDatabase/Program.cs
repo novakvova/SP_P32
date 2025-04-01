@@ -6,7 +6,10 @@ namespace ThreadAndDatabase
 {
     internal class Program
     {
-        private static DataBaseManager _dataBaseManager; 
+        private static DataBaseManager _dataBaseManager;
+        //Токен для переривання процесу роботи потоку.
+        private static CancellationToken cancellationToken;
+
         static void Main(string[] args)
         {
             Console.InputEncoding = Encoding.UTF8;
@@ -41,8 +44,8 @@ namespace ThreadAndDatabase
             int count = int.Parse(Console.ReadLine());
             //_dataBaseManager.AddBanans(count);
             _dataBaseManager.AddBanansAsync(count);
-
-            while (true)
+            var isTrue=true;
+            while (isTrue)
             {
                 Console.WriteLine("Назміть p - пауза, r - відновити, q - вихід");
                 var key = Console.ReadKey(true).Key;
@@ -61,7 +64,7 @@ namespace ThreadAndDatabase
                 else if (key == ConsoleKey.Q)
                 {
                     Console.WriteLine("Вихід");
-                    break;
+                    isTrue=false;
                 }
             }
         }
