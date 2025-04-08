@@ -31,6 +31,20 @@ namespace WebAliona.Controllers
             return View(list);
         }
 
+        [HttpGet] //Цей метод буде відображати сторінку де можвка вказаи інформацію про користувача
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost] //зберігає дані від користувача
+        public async Task<IActionResult> Create(Banan banan)
+        {
+            await _context.AddAsync(banan);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
         private Task<List<Banan>> GetListBanansAsync()
         {
             return Task.Run(() =>

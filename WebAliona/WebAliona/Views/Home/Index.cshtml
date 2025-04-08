@@ -14,6 +14,8 @@
 <body>
     <h1 class="text-center">Користувачі</h1>
     <div class="container">
+        <a href="@Url.Action("Create")" class="btn btn-success">Додати</a>
+
         <table class="table">
             <thead>
                 <tr>
@@ -27,10 +29,11 @@
             <tbody>
                 @foreach(var banan in Model)
                 {
+                    var image = banan.Image ?? "https://wl-brightside.cf.tsp.li/resize/728x/jpg/5a0/83d/948dad5d008eb09c86783a0f4c.jpg";
                     <tr>
                         <td>@banan.Id</td>
                         <td>
-                            <img src="https://wl-brightside.cf.tsp.li/resize/728x/jpg/5a0/83d/948dad5d008eb09c86783a0f4c.jpg" width="75" />
+                            <img src="@image" width="75" />
                         </td>
                         <td>@banan.LastName @banan.FirstName</td>
                         <td>@banan.Phone</td>
