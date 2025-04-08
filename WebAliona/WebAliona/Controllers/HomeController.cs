@@ -40,6 +40,8 @@ namespace WebAliona.Controllers
         [HttpPost] //зберігає дані від користувача
         public async Task<IActionResult> Create(Banan banan)
         {
+            //var fileName = await SaveFile(banan.Image);
+            //banan.Image = fileName;
             await _context.AddAsync(banan);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
