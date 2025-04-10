@@ -29,7 +29,20 @@
             <tbody>
                 @foreach(var banan in Model)
                 {
-                    var image = banan.Image ?? "https://wl-brightside.cf.tsp.li/resize/728x/jpg/5a0/83d/948dad5d008eb09c86783a0f4c.jpg";
+                    string image;
+                    if (!string.IsNullOrEmpty(banan.Image) && banan.Image.StartsWith("http"))
+                    {
+                        image = banan.Image;
+                    }
+                    else if (!string.IsNullOrEmpty(banan.Image))
+                    {
+                        image = Url.Content("~/images/" + banan.Image);
+                    }
+                    else
+                    {
+                        image = "https://t4.ftcdn.net/jpg/01/86/29/31/360_F_186293166_P4yk3uXQBDapbDFlR17ivpM6B1ux0fHG.jpg";
+                    }
+                    
                     <tr>
                         <td>@banan.Id</td>
                         <td>

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using WebAliona.Data;
 using WebAliona.Models;
 
@@ -38,8 +39,32 @@ namespace WebAliona.Controllers
         }
 
         [HttpPost] //зберігає дані від користувача
-        public async Task<IActionResult> Create(Banan banan)
+        public async Task<IActionResult> Create(Banan banan, IFormFile image)
         {
+            if (image != null && image.Length > 0)
+            {
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                Directory.CreateDirectory(folderPath);
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                var filePath = Path.Combine(folderPath, fileName);
+                //using (var fileStream = new FileStream(filePath, FileMode.Create))
+                //{
+                //    await Image.CopyToAsync(fileStream);
+                //}
+                using var stream = image.OpenReadStream();
+                using var newImage = await Image.LoadAsync(stream); // ImageSharp завантажує з потоку
+
+                newImage.Mutate(x => x.Resize(new ResizeOptions
+                {
+                    Size = new Size(800, 600),
+                    Mode = ResizeMode.Max
+                }));
+
+                await newImage.SaveAsync(filePath); // автоматично визначає формат за розширенням
+
+                banan.Image = fileName;
+            }
+
             //var fileName = await SaveFile(banan.Image);
             //banan.Image = fileName;
             await _context.AddAsync(banan);
