@@ -24,6 +24,7 @@
                     <th scope="col">Назва</th>
                     <th scope="col">Телефон</th>
                     <th scope="col">Стать</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -51,6 +52,11 @@
                         <td>@banan.LastName @banan.FirstName</td>
                         <td>@banan.Phone</td>
                         <td>@(banan.Sex ? "Чоловік" : "Жінка")</td>
+                        <td>
+                            <form action="@Url.Action("Delete", new {id = banan.Id})" method="post">
+                                <input type="submit" class="btn btn-danger" value="Видалити"/>
+                            </form>
+                        </td>
                     </tr>
                 } 
                 

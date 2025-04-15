@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using WebAliona.Data;
@@ -36,6 +37,18 @@ namespace WebAliona.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var item = await _context.Banans.SingleOrDefaultAsync(x => x.Id == id);
+            if (item != null)
+            {
+                _context.Banans.Remove(item);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost] //зберігає дані від користувача

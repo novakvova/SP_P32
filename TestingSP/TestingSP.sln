@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadImageThread", "Upload
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreadAndDatabase", "ThreadAndDatabase\ThreadAndDatabase.csproj", "{AEDC5BA7-8D5C-4A0B-BD33-22315743B11E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListCountryApi", "ListCountryApi\ListCountryApi.csproj", "{CEAA15F3-B68C-4456-9248-6EE6C70C9E67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetWeatherParallelFor", "GetWeatherParallelFor\GetWeatherParallelFor.csproj", "{F1AD92EF-51BA-48F0-93EA-9F32406690B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NovaPoshtaParallelFor", "NovaPoshtaParallelFor\NovaPoshtaParallelFor.csproj", "{B84620CE-F496-4F84-893E-AB6735D2C496}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,18 @@ Global
 		{AEDC5BA7-8D5C-4A0B-BD33-22315743B11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEDC5BA7-8D5C-4A0B-BD33-22315743B11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEDC5BA7-8D5C-4A0B-BD33-22315743B11E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEAA15F3-B68C-4456-9248-6EE6C70C9E67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEAA15F3-B68C-4456-9248-6EE6C70C9E67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEAA15F3-B68C-4456-9248-6EE6C70C9E67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEAA15F3-B68C-4456-9248-6EE6C70C9E67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1AD92EF-51BA-48F0-93EA-9F32406690B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1AD92EF-51BA-48F0-93EA-9F32406690B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1AD92EF-51BA-48F0-93EA-9F32406690B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1AD92EF-51BA-48F0-93EA-9F32406690B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B84620CE-F496-4F84-893E-AB6735D2C496}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B84620CE-F496-4F84-893E-AB6735D2C496}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B84620CE-F496-4F84-893E-AB6735D2C496}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B84620CE-F496-4F84-893E-AB6735D2C496}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
