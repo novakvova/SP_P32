@@ -14,43 +14,39 @@ string apiKey = "27e98316d8976226c4d4185fa2650f10";
 MyApplicationContext dbContext = new MyApplicationContext();
 dbContext.Database.Migrate();
 
-var model = new NovaPostaRequest
-{
-    ApiKey = apiKey,
-    ModelName = "Address",
-    CalledMethod = "getSettlementAreas",
-    MethodProperties = new() { Page = 1, Limit = 200 }
-};
-
-string json = JsonConvert.SerializeObject(model); //перетворює модел у json
-
 string url = "https://api.novaposhta.ua/v2.0/json/ ";
 
 HttpClient client = new ();
 
-HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
-HttpResponseMessage resp = await client.PostAsync(url, content);
-if (resp.IsSuccessStatusCode)
+if(!dbContext.Areas.Any())
 {
-    var respJson = await resp.Content.ReadAsStringAsync();
-
-    if(respJson is not null)
+    var model = new NovaPostaRequest
     {
-        var areasData = JsonConvert.DeserializeObject<NovaPoshtaResponse<Area>>(respJson);
-        await dbContext.Areas.AddRangeAsync(areasData.Data);
-        await dbContext.SaveChangesAsync();
+        ApiKey = apiKey,
+        ModelName = "Address",
+        CalledMethod = "getSettlementAreas",
+        MethodProperties = new() { Page = 1 }
+    };
 
-        //if (areasData is not null)
-        //{
-        //    foreach (var area in areasData.Data)
-        //    {
-        //        Console.WriteLine($"Result {area.Ref}\t {area.Description}");
-        //    }
-        //}
+    string json = JsonConvert.SerializeObject(model); //перетворює модел у json
+
+    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+    HttpResponseMessage resp = await client.PostAsync(url, content);
+    if (resp.IsSuccessStatusCode)
+    {
+        var respJson = await resp.Content.ReadAsStringAsync();
+
+        if (respJson is not null)
+        {
+            var areasData = JsonConvert.DeserializeObject<NovaPoshtaResponse<Area>>(respJson);
+            await dbContext.Areas.AddRangeAsync(areasData.Data);
+            await dbContext.SaveChangesAsync();
+        }
     }
+    else
+    {
+        Console.WriteLine("Помилка запиту");
+    }
+}
 
-}
-else
-{
-    Console.WriteLine("Помилка запиту");
-}
+
