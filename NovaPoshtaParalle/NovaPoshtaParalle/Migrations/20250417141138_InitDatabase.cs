@@ -5,18 +5,30 @@
 namespace NovaPoshtaParalle.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCityTables : Migration
+    public partial class InitDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "tblAreas",
+                columns: table => new
+                {
+                    Ref = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblAreas", x => x.Ref);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cities",
                 columns: table => new
                 {
-                    Ref = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    Area = table.Column<string>(type: "TEXT", nullable: false)
+                    Ref = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Area = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,6 +52,9 @@ namespace NovaPoshtaParalle.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Cities");
+
+            migrationBuilder.DropTable(
+                name: "tblAreas");
         }
     }
 }

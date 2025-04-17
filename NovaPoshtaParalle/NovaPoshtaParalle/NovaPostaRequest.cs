@@ -22,7 +22,7 @@ public class NovaPoshtaMethodProperties
     /// <summary>
     /// Номер сторінки
     /// </summary>
-    public int Page { get; set; } = 1;
+    public string Page { get; set; } = "1";
 
     /// <summary>
     /// Кількість населених пунктів за 1 запит

@@ -2,6 +2,11 @@
 
 namespace NovaPoshtaParalle;
 
+public class NovaPoshtaResponseArea<T>
+{
+    public T[] Data { get; set; }
+}
+
 public class NovaPoshtaResponse<T>
 {
     public T[] Data { get; set; }
