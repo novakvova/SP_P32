@@ -140,7 +140,7 @@ namespace NovaPoshtaParalle
                     DepartmentResponse result = JsonConvert.DeserializeObject<DepartmentResponse>(responseString);
 
                     lenght = Convert.ToInt32(Math.Ceiling((double)result.Info.TotalCount / pages));
-                    //lenght = 10;
+                    //lenght = 10
                     List<DepartmentEntity> listDepartments = new List<DepartmentEntity>();
 
                     await Parallel.ForAsync(1, pages + 1, async (i, _) =>
