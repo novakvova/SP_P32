@@ -25,7 +25,7 @@ if(!dbContext.Areas.Any())
     {
         ApiKey = apiKey,
         ModelName = "Address",
-        CalledMethod = "getSettlementAreas",
+        CalledMethod = "getAreas",
         MethodProperties = new() { Page = "1" }
     };
 
@@ -52,6 +52,7 @@ if(!dbContext.Areas.Any())
 
 // getting cities asyncronously
 
+
 if (!dbContext.Cities.Any())
 {
     int pages = Environment.ProcessorCount * 2;
@@ -59,7 +60,7 @@ if (!dbContext.Cities.Any())
     var model = new NovaPostaRequest()
     {
         ApiKey = apiKey,
-        ModelName = "AddressGeneral",
+        ModelName = "Address",
         CalledMethod = "getCities",
         MethodProperties = new NovaPoshtaMethodProperties { Page = "1", Limit = 1 }
     };
@@ -69,7 +70,7 @@ if (!dbContext.Cities.Any())
     if (response.IsSuccessStatusCode)
     {
         string responseString = await response.Content.ReadAsStringAsync();
-        Console.WriteLine("DATA {0}", responseString);
+        //Console.WriteLine("DATA {0}", responseString);
         NovaPoshtaResponse<City> result = JsonConvert.DeserializeObject<NovaPoshtaResponse<City>>(responseString);
         Console.WriteLine(result.Info.TotalCount);
         Console.WriteLine("\n\n");
@@ -79,29 +80,6 @@ if (!dbContext.Cities.Any())
         Stopwatch stopWatch = new Stopwatch();
         stopWatch.Start();
 
-        //for (int i = 1; i < pages+1; i++)
-        //{
-        //    var localModel = new NovaPostaRequest()
-        //    {
-        //        ApiKey = apiKey,
-        //        ModelName = "AddressGeneral",
-        //        CalledMethod = "getCities",
-        //        MethodProperties = new() { Page = i.ToString(), Limit = lenght }
-        //    };
-
-        //    var localJson = JsonConvert.SerializeObject(localModel);
-        //    var localContent = new StringContent(localJson, Encoding.UTF8, "application/json");
-
-        //    var localResponse = await client.PostAsync(url, localContent);
-        //    var localResponseString = await localResponse.Content.ReadAsStringAsync();
-        //    var localResult = JsonConvert.DeserializeObject<NovaPoshtaResponse<City>>(localResponseString);
-
-        //    if (localResult?.Data != null && localResult.Data.Length > 0)
-        //    {
-        //        Console.WriteLine("Cities count {0}", localResult.Data.Length);
-        //        listCities.AddRange(localResult.Data);
-        //    }
-        //}
 
         await Parallel.ForAsync(1, pages + 1, async (i, _) =>
         {
@@ -110,7 +88,7 @@ if (!dbContext.Cities.Any())
             var localModel = new NovaPostaRequest()
             {
                 ApiKey = apiKey,
-                ModelName = "AddressGeneral",
+                ModelName = "Address",
                 CalledMethod = "getCities",
                 MethodProperties = new() { Page = i.ToString(), Limit = lenght }
             };
@@ -124,17 +102,14 @@ if (!dbContext.Cities.Any())
 
             if (localResult?.Data != null && localResult.Data.Length > 0)
             {
-                Console.WriteLine("Cities count {0}", localResult.Data.Length);
                 listCities.AddRange(localResult.Data);
             }
         });
 
         Console.WriteLine("Count Cities {0}", listCities.Count);
 
-        foreach (var city in listCities)
-        {
-
-        }
+        await dbContext.AddRangeAsync(listCities);
+        await dbContext.SaveChangesAsync();
 
 
         stopWatch.Stop();
@@ -148,6 +123,8 @@ if (!dbContext.Cities.Any())
         Console.WriteLine("RunTime " + elapsedTime);
     }
 }
+
+
 
 
 

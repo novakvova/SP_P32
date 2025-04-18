@@ -10,9 +10,10 @@ namespace NovaPoshtaParalle
         /// </summary>
         public DbSet<Area> Areas { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<DepartmentEntity> Departments { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Database=readDataNovaPoshra;Username=postgres;Password=123456");
+            optionsBuilder.UseSqlite("Data Source=bober.girl");
         }
     }
 }

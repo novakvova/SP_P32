@@ -4,34 +4,29 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NovaPoshtaParalle;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace NovaPoshtaParalle.Migrations
 {
     [DbContext(typeof(MyApplicationContext))]
-    [Migration("20250417141138_InitDatabase")]
-    partial class InitDatabase
+    [Migration("20250417203450_Add_CitiesTabel")]
+    partial class Add_CitiesTabel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.13")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.13");
 
             modelBuilder.Entity("NovaPoshtaParalle.Entities.Area", b =>
                 {
                     b.Property<string>("Ref")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Ref");
 
@@ -41,16 +36,19 @@ namespace NovaPoshtaParalle.Migrations
             modelBuilder.Entity("NovaPoshtaParalle.Entities.City", b =>
                 {
                     b.Property<string>("Ref")
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Area")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasAnnotation("Relational:JsonPropertyName", "Area");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SettlementTypeDescription")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Ref");
 
