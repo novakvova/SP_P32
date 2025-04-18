@@ -8,121 +8,54 @@ using NovaPoshtaParalle.Entities;
 Console.InputEncoding = Encoding.Unicode;
 Console.OutputEncoding = Encoding.Unicode;
 
-string apiKey = "27e98316d8976226c4d4185fa2650f10";
+NovaPostaService novaPostaService = new NovaPostaService();
 
-//Хочу отримтаи список областей
+Stopwatch stopWatch = new Stopwatch();
+stopWatch.Start();
 
-MyApplicationContext dbContext = new MyApplicationContext();
-dbContext.Database.Migrate();
+await novaPostaService.SeedAreas();
 
-string url = "https://api.novaposhta.ua/v2.0/json/ ";
+stopWatch.Stop();
+// Get the elapsed time as a TimeSpan value.
+TimeSpan ts = stopWatch.Elapsed;
 
-HttpClient client = new ();
+// Format and display the TimeSpan value.
+string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+    ts.Hours, ts.Minutes, ts.Seconds,
+    ts.Milliseconds / 10);
+Console.WriteLine("Seed Areas time " + elapsedTime);
 
-if(!dbContext.Areas.Any())
-{
-    var model = new NovaPostaRequest
-    {
-        ApiKey = apiKey,
-        ModelName = "Address",
-        CalledMethod = "getAreas",
-        MethodProperties = new() { Page = "1" }
-    };
+stopWatch.Reset();
+stopWatch.Start();
 
-    string json = JsonConvert.SerializeObject(model); //перетворює модел у json
+await novaPostaService.SeedCities();
 
-    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
-    HttpResponseMessage resp = await client.PostAsync(url, content);
-    if (resp.IsSuccessStatusCode)
-    {
-        var respJson = await resp.Content.ReadAsStringAsync();
+stopWatch.Stop();
+// Get the elapsed time as a TimeSpan value.
+ts = stopWatch.Elapsed;
 
-        if (respJson is not null)
-        {
-            var areasData = JsonConvert.DeserializeObject<NovaPoshtaResponseArea<Area>>(respJson);
-            await dbContext.Areas.AddRangeAsync(areasData.Data);
-            await dbContext.SaveChangesAsync();
-        }
-    }
-    else
-    {
-        Console.WriteLine("Помилка запиту");
-    }
-}
-
-// getting cities asyncronously
+// Format and display the TimeSpan value.
+elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+    ts.Hours, ts.Minutes, ts.Seconds,
+    ts.Milliseconds / 10);
+Console.WriteLine("Seed Cities time " + elapsedTime);
 
 
-if (!dbContext.Cities.Any())
-{
-    int pages = Environment.ProcessorCount * 2;
-    int lenght;
-    var model = new NovaPostaRequest()
-    {
-        ApiKey = apiKey,
-        ModelName = "Address",
-        CalledMethod = "getCities",
-        MethodProperties = new NovaPoshtaMethodProperties { Page = "1", Limit = 1 }
-    };
-    var json = JsonConvert.SerializeObject(model);
-    var content = new StringContent(json, Encoding.UTF8, "application/json");
-    var response = await client.PostAsync(url, content);
-    if (response.IsSuccessStatusCode)
-    {
-        string responseString = await response.Content.ReadAsStringAsync();
-        //Console.WriteLine("DATA {0}", responseString);
-        NovaPoshtaResponse<City> result = JsonConvert.DeserializeObject<NovaPoshtaResponse<City>>(responseString);
-        Console.WriteLine(result.Info.TotalCount);
-        Console.WriteLine("\n\n");
-        lenght = Convert.ToInt32(Math.Ceiling((double)result.Info.TotalCount / pages));
-        Console.WriteLine(pages);
-        List<City> listCities = new List<City>();
-        Stopwatch stopWatch = new Stopwatch();
-        stopWatch.Start();
+stopWatch.Reset();
 
+stopWatch.Start();
 
-        await Parallel.ForAsync(1, pages + 1, async (i, _) =>
-        {
-            //await Task.Delay(1000);
+await novaPostaService.SeedDepartments();
 
-            var localModel = new NovaPostaRequest()
-            {
-                ApiKey = apiKey,
-                ModelName = "Address",
-                CalledMethod = "getCities",
-                MethodProperties = new() { Page = i.ToString(), Limit = lenght }
-            };
+stopWatch.Stop();
+// Get the elapsed time as a TimeSpan value.
+ts = stopWatch.Elapsed;
 
-            var localJson = JsonConvert.SerializeObject(localModel);
-            var localContent = new StringContent(localJson, Encoding.UTF8, "application/json");
-
-            var localResponse = await client.PostAsync(url, localContent);
-            var localResponseString = await localResponse.Content.ReadAsStringAsync();
-            var localResult = JsonConvert.DeserializeObject<NovaPoshtaResponse<City>>(localResponseString);
-
-            if (localResult?.Data != null && localResult.Data.Length > 0)
-            {
-                listCities.AddRange(localResult.Data);
-            }
-        });
-
-        Console.WriteLine("Count Cities {0}", listCities.Count);
-
-        await dbContext.AddRangeAsync(listCities);
-        await dbContext.SaveChangesAsync();
-
-
-        stopWatch.Stop();
-        // Get the elapsed time as a TimeSpan value.
-        TimeSpan ts = stopWatch.Elapsed;
-
-        // Format and display the TimeSpan value.
-        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            ts.Hours, ts.Minutes, ts.Seconds,
-            ts.Milliseconds / 10);
-        Console.WriteLine("RunTime " + elapsedTime);
-    }
-}
+// Format and display the TimeSpan value.
+elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+    ts.Hours, ts.Minutes, ts.Seconds,
+    ts.Milliseconds / 10);
+Console.WriteLine("Seed Departments time " + elapsedTime);
 
 
 

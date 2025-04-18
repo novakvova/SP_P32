@@ -7,15 +7,15 @@ public class NovaPoshtaResponseArea<T>
     public T[] Data { get; set; }
 }
 
-public class NovaPoshtaResponse<T>
+public class NovaPoshtaResponseCity<T>
 {
     public T[] Data { get; set; }
 
     [JsonPropertyName("info")]
-    public NovaPoshtaInfo Info { get; set; }
+    public NovaPoshtaInfoCity Info { get; set; }
 }
 
-public class NovaPoshtaInfo
+public class NovaPoshtaInfoCity
 {
     [JsonPropertyName("totalCount")]
     public int TotalCount { get; set; }

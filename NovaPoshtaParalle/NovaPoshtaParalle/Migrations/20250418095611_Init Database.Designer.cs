@@ -10,8 +10,8 @@ using NovaPoshtaParalle;
 namespace NovaPoshtaParalle.Migrations
 {
     [DbContext(typeof(MyApplicationContext))]
-    [Migration("20250417203450_Add_CitiesTabel")]
-    partial class Add_CitiesTabel
+    [Migration("20250418095611_Init Database")]
+    partial class InitDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,34 @@ namespace NovaPoshtaParalle.Migrations
                     b.ToTable("Cities");
                 });
 
+            modelBuilder.Entity("NovaPoshtaParalle.Entities.DepartmentEntity", b =>
+                {
+                    b.Property<string>("Ref")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CityRef")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ShortAddress")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Ref");
+
+                    b.HasIndex("CityRef");
+
+                    b.ToTable("tblDepartments");
+                });
+
             modelBuilder.Entity("NovaPoshtaParalle.Entities.City", b =>
                 {
                     b.HasOne("NovaPoshtaParalle.Entities.Area", "AreaObj")
@@ -66,6 +94,17 @@ namespace NovaPoshtaParalle.Migrations
                         .IsRequired();
 
                     b.Navigation("AreaObj");
+                });
+
+            modelBuilder.Entity("NovaPoshtaParalle.Entities.DepartmentEntity", b =>
+                {
+                    b.HasOne("NovaPoshtaParalle.Entities.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
                 });
 #pragma warning restore 612, 618
         }
