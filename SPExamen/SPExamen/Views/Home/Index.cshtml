@@ -1,94 +1,67 @@
 ﻿@model DriverViewModel
 @{
-    ViewData["Title"] = "Home Page";
-    Layout = null;
+	ViewData["Title"] = "Home Page";
+	Layout = null;
 }
 
 
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Форма з перемикачем</title>
-    <!-- Підключення TailwindCSS через CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Форма з перемикачем</title>
+	<!-- Підключення TailwindCSS через CDN -->
+	<script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-6">
 
-    <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-        <!-- Заголовок -->
-        <h2 class="text-xl font-semibold text-center text-gray-700 mb-6">Налаштування сканування</h2>
-        
-        <label for="mode" class="block text-gray-700">Диск або папка:</label>
-        <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            <option selected>Оберіть диск або папку</option>
-            @foreach(var item in Model.Drivers)
-            {
-                <option value="@item">@item</option>
-            }
-        </select>
+	<div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
+		<form asp-action="Index">
+			<h2 class="text-xl font-semibold text-center text-gray-700 mb-6">Налаштування сканування</h2>
 
-        @*
-        <!-- Перемикач між режимами -->
-        <label for="mode" class="block text-gray-700">Choose mode:</label> 
-        <div class="flex items-center space-x-4 mb-6"> 
-            <span class="text-sm text-gray-500">Text</span> 
-            <input type="checkbox" id="mode" class="toggle-checkbox w-10 h-6 bg-gray-300 rounded-full transition-all duration-300 focus:outline-none" /> 
-            <span class="text-sm text-gray-500">Files</span> 
-        </div>
-        
-        <!-- Текстове поле та поле для вибору файлів в текстовому режимі -->
-        <div id="text-mode" class="mt-6">
-            <textarea id="text-field" class="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введіть текст..."></textarea>
+			<label for="mode" class="block text-gray-700">Диск або папка:</label>
+			<select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+				<option selected>Оберіть диск або папку</option>
+				@foreach (var item in Model.Drivers)
+				{
+					<option value="@item">@item</option>
+				}
+			</select>
 
-            <!-- Поле для вибору файлу в текстовому режимі -->
-            <div class="mt-4">
-                <input type="file" id="file-input-1" class="file-input p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-        </div>
+			<div class="mt-4">
+				<label class="inline-flex items-center cursor-pointer">
+					<input type="checkbox" name="isFile" value="" class="sr-only peer">
+					<div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+					<span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Toggle me</span>
+				</label>
+			</div>
 
-        <!-- Режим файлів та поле для вибору файлу -->
-        <div id="file-mode" class="mt-6 hidden">
-            <!-- Поле для вибору файлу в режимі файлів -->
-            <div class="mt-4">
-                <input type="file" id="file-input-2" class="file-input p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
 
-            <!-- Текстове поле в режимі файлів -->
-            <div class="mt-4">
-                <input type="file" id="file-input-1" class="file-input p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-        </div>
-        *@
-    </div>
 
-    <script>
-        // Перемикання між текстовим режимом та режимом файлів
-        const toggle = document.getElementById('mode');
-        const textMode = document.getElementById('text-mode');
-        const fileMode = document.getElementById('file-mode');
-        const textField = document.getElementById('text-field');
-        const fileTextField = document.getElementById('file-text-field');
-        const fileInput1 = document.getElementById('file-input-1');
-        const fileInput2 = document.getElementById('file-input-2');
 
-        toggle.addEventListener('change', () => {
-          if (toggle.checked) {
-            // Перехід у режим файлів
-            textMode.classList.add('hidden');
-            fileMode.classList.remove('hidden');
-            textField.value = ''; // Очистити текстове поле при переході в режим файлів
-            fileTextField.value = ''; // Очистити текстове поле для файлів при переході
-            fileInput1.value = ''; // Очистити поле для вибору файлів
-          } else {
-            // Перехід у текстовий режим
-            textMode.classList.remove('hidden');
-            fileMode.classList.add('hidden');
-            fileInput2.value = ''; // Очистити поле для вибору файлів
-          }
-        });
-    </script>
-    
+			<label for="mode" class="block text-gray-700">Слова для пошуку:</label>
+			<textarea 
+				class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 resize-none"
+				rows="4"
+				placeholder="Введіть слова через пробіл"
+			></textarea>
+
+			<label for="mode" class="block text-gray-700">Папка для збереження результатів</label>
+			<input 
+				type="text" 
+				class="border border-gray-300 rounded-md p-2 w-full"
+				placeholder="Введіть куди збегінати результат"
+			/>
+
+
+			<button class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+			  Сканувати
+			</button>
+
+		</form>
+
+	</div>
+
 </body>
 </html>
